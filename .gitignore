@@ -21,9 +21,13 @@ Thumbs.db
 
 # Build / tooling output
 .vercel
+.netlify
 .playwright-cli/
 generated-images/
 dist/
+
+# Netlify build artefact — a copy of /img produced by scripts/prepare-netlify.js
+public/img/
 
 # WorkBuddy AI workspace metadata (memory, local tooling) — not part of the site.
 # Remove this line if you want these notes version-controlled.

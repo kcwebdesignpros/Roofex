@@ -11,8 +11,8 @@ The project is a standard Express + EJS app. There is no database and no admin p
 | # | Task | Where |
 |---|------|-------|
 | 1 | Replace the placeholder business details (phone, email, address, licence, social links) | `data/site.js` |
-| 2 | Set `SITE_URL` to your real domain | Environment variables (both platforms) |
-| 3 | Point the contact form at a real mailbox (see §5) | `server.js` → `POST /contact` |
+| 2 | Set `SITE_URL` to your real domain | Environment variables (any platform) |
+| 3 | Point the contact form at a real mailbox (see §6) | `server.js` → `POST /contact` |
 | 4 | Replace placeholder team names/photos if needed | `data/team.js` + `img/team-*.webp` |
 | 5 | After going live, submit `/sitemap.xml` to Google Search Console | Search Console |
 
@@ -103,11 +103,121 @@ vercel env add SITE_URL production
 | `500` with "Failed to lookup view" | `vercel.json` is missing or `views/**` is not in `includeFiles`. Restore the file. |
 | Images 404 but pages load | Confirm the `img/` folder is committed to Git (check `.gitignore`). |
 | Canonical tags show `localhost` | `SITE_URL` is not set — add it and redeploy. |
-| Contact form works but you get no email | Expected — see §5. |
+| Contact form works but you get no email | Expected — see §6. |
 
 ---
 
-## 3. Deploy to Hostinger
+## 3. Deploy to Netlify
+
+**Read this first:** Netlify is a static host with serverless functions — unlike Vercel and Hostinger it does **not** run a long-lived Node process. Express therefore runs inside a single catch-all function using `serverless-http`. That wiring is already committed, so you only need to connect the repo.
+
+### 3a. What is already configured
+
+| File | Purpose |
+|------|---------|
+| `netlify.toml` | Build command, publish directory, function directory, catch-all rewrite, cache + security headers |
+| `netlify/functions/server.js` | Wraps the Express app with `serverless-http` |
+| `scripts/prepare-netlify.js` | Copies `img/` → `public/img/` so images are served from the CDN instead of the function |
+| `serverless-http` | Added to `dependencies` |
+
+Two details in `netlify.toml` are load-bearing and worth understanding:
+
+```toml
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["views/**", "data/**", "lib/**", "img/**"]
+```
+
+EJS templates are read from **disk at runtime**, not `require`d — so the bundler cannot discover them by itself. Without `included_files` every page fails with `Failed to lookup view "index"`.
+
+```toml
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+```
+
+There is deliberately **no `force = true`**. Netlify serves a matching file from the publish directory before applying the rewrite, so `/css/*`, `/js/*` and `/img/*` never reach the function — only real page routes do.
+
+### 3b. Deploy from the Netlify UI (recommended)
+
+1. Make sure the repo is on GitHub (see §2a).
+2. Go to <https://app.netlify.com/start> and sign in with GitHub.
+3. **Add new site → Import an existing project → GitHub →** pick `kcwebdesignpros/Roofex`.
+4. Netlify reads `netlify.toml`, so the build settings fill in automatically. Confirm they read:
+
+   | Setting | Value |
+   |---------|-------|
+   | Build command | `npm run prepare:netlify` |
+   | Publish directory | `public` |
+   | Functions directory | `netlify/functions` |
+
+5. Expand **Environment variables** and add:
+
+   | Key | Value |
+   |-----|-------|
+   | `SITE_URL` | `https://your-domain.com` (no trailing slash) |
+
+   Do **not** set `PORT` — there is no port to bind.
+6. Click **Deploy site**. The first build takes about a minute.
+
+### 3c. Deploy from the CLI
+
+```bash
+npm install -g netlify-cli
+netlify login
+
+cd "Roofing Website"
+netlify init                       # create + link a new site (or: netlify link)
+
+netlify env:set SITE_URL https://www.roofex.com
+
+netlify deploy --build             # draft URL for testing
+netlify deploy --build --prod      # production
+```
+
+`--build` matters: it runs the build command locally first, so you catch a broken build before it reaches Netlify.
+
+### 3d. Add your custom domain
+
+1. Site → **Domain management → Add a domain**.
+2. Either delegate DNS to Netlify (change your nameservers) or keep your registrar and add:
+
+   | Type | Name | Value |
+   |------|------|-------|
+   | `CNAME` | `www` | `your-site-name.netlify.app` |
+   | `A` | `@` | `75.2.60.5` |
+
+3. Netlify provisions a free Let's Encrypt certificate automatically and renews it.
+4. Set your primary domain and enable the redirect to it, then update `SITE_URL` to match **exactly** and trigger a redeploy so canonical tags and the sitemap pick it up.
+
+### 3e. Redeploying
+
+Any push to `main` triggers an automatic build. Every pull request gets its own Deploy Preview URL, which is handy for reviewing content changes before they go live.
+
+### 3f. Netlify troubleshooting
+
+| Symptom | Cause / fix |
+|---------|-------------|
+| `Failed to lookup view "index"` | `included_files` is missing or wrong in the `[functions]` block of `netlify.toml`. |
+| Images return 404 | The build step didn't run. Check the build log for `✓ Copied N images to public/img`. |
+| Every page returns 502 | The function crashed. Netlify → **Functions → server → Logs** shows the stack trace. |
+| Only the homepage works | The `/*` redirect is missing, or `force = true` was added (which would also swallow `/css`, `/js` and `/img`). |
+| Canonical tags say `localhost` | `SITE_URL` isn't set — add it and redeploy. |
+| First request of the day is slow | Serverless cold start (~300–600 ms). Subsequent requests are served from Netlify's CDN edge because the app returns `s-maxage=3600`. |
+
+### 3g. Netlify vs Vercel for this project
+
+Both work, and the repo supports each without changes.
+
+- **Vercel** runs the Express app natively (`vercel.json` → `@vercel/node`). Fewer moving parts, no wrapper, no build step.
+- **Netlify** needs the function wrapper and the image-copy build step, but the free tier is generous and Deploy Previews are excellent for client review.
+
+If you have no strong preference, Vercel is the marginally simpler host for this stack. Netlify is a perfectly good choice if you already use it elsewhere.
+
+---
+
+## 4. Deploy to Hostinger
 
 Hostinger offers two routes. Pick based on your plan.
 
@@ -272,7 +382,7 @@ Available on plans that include **Node.js** support. If your plan does not show 
 
 ---
 
-## 4. Environment variables summary
+## 5. Environment variables summary
 
 | Variable | Required | Example | Purpose |
 |----------|----------|---------|---------|
@@ -281,7 +391,7 @@ Available on plans that include **Node.js** support. If your plan does not show 
 
 ---
 
-## 5. Wiring the contact form to a real inbox
+## 6. Wiring the contact form to a real inbox
 
 Out of the box, `POST /contact` validates the submission, logs it to the server console and renders a success page — deliberately, so the site works with **no database and no admin panel**.
 
@@ -320,7 +430,7 @@ Add `SMTP_HOST`, `SMTP_USER` and `SMTP_PASS` to your environment variables.
 
 ---
 
-## 6. Post-launch SEO checklist
+## 7. Post-launch SEO checklist
 
 1. Submit `https://your-domain.com/sitemap.xml` in **Google Search Console**.
 2. Verify `https://your-domain.com/robots.txt` returns the correct absolute sitemap URL.
@@ -331,13 +441,20 @@ Add `SMTP_HOST`, `SMTP_USER` and `SMTP_PASS` to your environment variables.
 
 ---
 
-## 7. Quick reference — project structure
+## 8. Quick reference — project structure
 
 ```
 Roofing Website/
 ├── server.js              # Express app, routes, sitemap, robots, security headers
+│                          # (exports the app; only binds a port when run directly)
 ├── vercel.json            # Vercel build + routing + cache headers
+├── netlify.toml           # Netlify build, functions, rewrite + cache headers
+├── netlify/functions/
+│   └── server.js          # Netlify entry — wraps the app with serverless-http
+├── scripts/
+│   └── prepare-netlify.js # Copies /img → /public/img for Netlify's CDN
 ├── .env.example           # Environment variable template
+├── .gitattributes         # LF normalisation + binary markers
 ├── package.json
 ├── data/                  # ← ALL CONTENT LIVES HERE (no database needed)
 │   ├── site.js            # Business details, nav, stats, social links
@@ -352,5 +469,6 @@ Roofing Website/
 │   ├── partials/          # head, header, footer, page-hero, cta
 │   └── *.ejs              # One file per page type
 ├── public/                # css/style.css · js/main.js · site.webmanifest
-└── img/                   # All images (WebP) + favicons
+│                          # (public/img/ is a Netlify build artefact — git-ignored)
+└── img/                   # All images (WebP) + favicons — source of truth
 ```

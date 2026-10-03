@@ -9,6 +9,7 @@
  */
 
 const path = require('path');
+const fs = require('fs');
 const express = require('express');
 const compression = require('compression');
 
@@ -20,6 +21,35 @@ const team = require('./data/team');
 const S = require('./lib/schema');
 const { icon } = require('./lib/icons');
 
+/**
+ * Resolve the project root that holds views/, data/, lib/, public/ and img/.
+ *
+ * `__dirname` is correct when running as a normal Node process, but serverless
+ * bundlers (Netlify Functions, Vercel) relocate the entry file, so we probe a
+ * few candidates and pick the first one that actually contains the templates.
+ * APP_ROOT can override everything.
+ */
+function resolveRoot() {
+  const candidates = [
+    process.env.APP_ROOT,
+    __dirname,
+    path.join(__dirname, '..', '..'),
+    path.join(__dirname, '..'),
+    process.cwd(),
+  ].filter(Boolean);
+
+  for (const dir of candidates) {
+    try {
+      if (fs.existsSync(path.join(dir, 'views', 'index.ejs'))) return dir;
+    } catch (e) {
+      /* ignore and try the next candidate */
+    }
+  }
+  return __dirname;
+}
+
+const ROOT = resolveRoot();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const BASE_URL = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\/+$/, '');
@@ -28,7 +58,7 @@ const BASE_URL = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\
  * App configuration
  * ------------------------------------------------------------------ */
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(ROOT, 'views'));
 app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.use(compression());
@@ -52,8 +82,8 @@ const staticOpts = (maxAge) => ({
     res.setHeader('Cache-Control', `public, max-age=${Math.floor(maxAge / 1000)}, immutable`);
   },
 });
-app.use(express.static(path.join(__dirname, 'public'), staticOpts(7 * 24 * 3600 * 1000)));
-app.use('/img', express.static(path.join(__dirname, 'img'), staticOpts(30 * 24 * 3600 * 1000)));
+app.use(express.static(path.join(ROOT, 'public'), staticOpts(7 * 24 * 3600 * 1000)));
+app.use('/img', express.static(path.join(ROOT, 'img'), staticOpts(30 * 24 * 3600 * 1000)));
 
 /* Body parsing (contact form) -------------------------------------- */
 app.use(express.urlencoded({ extended: false, limit: '64kb' }));
@@ -458,8 +488,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`\n  Roofex is running →  ${BASE_URL}  (port ${PORT})\n`);
-});
+/**
+ * Only bind a port when this file is run directly (`npm start`).
+ * Serverless platforms (Netlify Functions, Vercel) import the app instead and
+ * drive it through their own handler, so listening there would be wasteful.
+ */
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`\n  Roofex is running →  ${BASE_URL}  (port ${PORT})\n`);
+  });
+}
 
 module.exports = app;

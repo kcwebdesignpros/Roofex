@@ -1,0 +1,55 @@
+# Netlify configuration for the Roofex Express + EJS site.
+#
+# Netlify is a static host with serverless functions, so Express runs inside a
+# single catch-all function (netlify/functions/server.js) rather than as a
+# long-lived process. Static assets are served from the CDN first — the `/*`
+# rewrite below does NOT have `force = true`, so any file that exists in the
+# publish directory wins and never reaches the function.
+
+[build]
+  command = "npm run prepare:netlify"
+  publish = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# EJS templates and the JSON data files are read from disk at runtime, so the
+# bundler must be told to ship them alongside the function.
+[functions]
+  node_bundler = "esbuild"
+  included_files = [
+    "views/**",
+    "data/**",
+    "lib/**",
+    "img/**"
+  ]
+
+# Everything that is not a real file in /public goes to the Express app.
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/server"
+  status = 200
+
+# Immutable caching for hashed-free but rarely changing assets.
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000, immutable"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+    Referrer-Policy = "strict-origin-when-cross-origin"

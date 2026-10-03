@@ -90,7 +90,13 @@ Copy `.env.example` to `.env` (or export the variables in your shell) to set `PO
 Roofing Website/
 ├── server.js              # Express app: routes, sitemap, robots, headers
 ├── vercel.json            # Vercel build, routing and cache config
+├── netlify.toml           # Netlify build, functions, rewrite and cache config
+├── netlify/functions/
+│   └── server.js          # Netlify entry point (wraps the app with serverless-http)
+├── scripts/
+│   └── prepare-netlify.js # Copies /img → /public/img for Netlify's CDN
 ├── .env.example
+├── .gitattributes         # LF normalisation + binary markers
 ├── data/                  # ← EDIT CONTENT HERE
 │   ├── site.js            # Business name, phone, email, address, nav, stats, socials
 │   ├── services.js        # 8 services (each generates a detail page)
@@ -130,13 +136,16 @@ Everything is data-driven — you never need to touch the templates to update co
 See **[DEPLOYMENT.md](DEPLOYMENT.md)** for complete, step-by-step guides:
 
 - **Vercel** — Git import, environment variables, custom domain, CLI deploys, troubleshooting
+- **Netlify** — serverless-function setup (`netlify.toml`, `serverless-http`, the image-copy build step), CLI deploys, domain, troubleshooting
 - **Hostinger** — both the VPS route (Node + PM2 + Nginx + Let's Encrypt) and the hPanel Node.js app route
 - Wiring the contact form to a real inbox (SMTP, form endpoint, or serverless email API)
 - Post-launch SEO checklist
+
+All three hosts work from the same repo with no code changes — the platform-specific wiring is already committed.
 
 ---
 
 ## Notes
 
-- The contact form has **no database**. It validates the submission, logs it to the server console and shows a success page. See DEPLOYMENT.md §5 to connect it to email.
+- The contact form has **no database**. It validates the submission, logs it to the server console and shows a success page. See DEPLOYMENT.md §6 to connect it to email.
 - Contact details, licence numbers, team names and reviews are **placeholders** — replace them with real business information before going live.
