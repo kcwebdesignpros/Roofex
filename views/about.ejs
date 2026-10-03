@@ -1,0 +1,134 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }],
+        heroTitle: 'About Roofex',
+        heroText: 'A local, family-run roofing company built on craftsmanship, honesty and roofs that outlast the weather.'
+      }) %>
+
+  <section class="section">
+    <div class="container split">
+      <div class="split__media reveal">
+        <img src="/img/about-roofex.webp" alt="A Roofex craftsman installing shingles with a nail gun" width="1254" height="1254" loading="lazy" decoding="async">
+        <div class="split__badge"><strong><%= site.founded %></strong><span>Founded</span></div>
+      </div>
+      <div class="split__body reveal">
+        <p class="eyebrow">Our story</p>
+        <h2>Fifteen years of roofs that keep their promise</h2>
+        <p>
+          Roofex began in <%= site.founded %> with one truck, one crew and a simple idea: do roofing properly,
+          charge a fair price, and let the work speak for itself. Fifteen years and more than 4,800 roofs later,
+          that idea has not changed.
+        </p>
+        <p>
+          We have grown deliberately rather than quickly. Every crew member is trained, certified and accountable,
+          and every project is supervised by someone who has spent years on the tools. We would rather turn work
+          away than rush a roof we cannot stand behind.
+        </p>
+        <p>
+          Today Roofex serves homeowners and commercial property managers across the <%= site.address.city %> metro
+          and surrounding communities, from emergency leak repairs to full-scale commercial re-roofs. Whatever the size of the
+          job, the standard is the same.
+        </p>
+        <ul class="tick-list">
+          <% site.certifications.forEach(function (c) { %>
+          <li><%- icon('check', 18) %> <%= c %></li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container">
+      <ul class="stats reveal" data-count-group>
+        <% site.stats.forEach(function (s) { %>
+        <li class="stats__item"><strong data-count="<%= s.count %>" data-suffix="<%= s.suffix %>"><%= s.value %></strong><span><%= s.label %></span></li>
+        <% }); %>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">What we stand for</p>
+        <h2>Our values, on every single roof</h2>
+      </div>
+      <div class="grid grid--4">
+        <article class="mini mini--card reveal">
+          <span class="mini__ico"><%- icon('shield', 24) %></span>
+          <h3>Do it right</h3>
+          <p>If a detail will not last, we redo it. Corners are never cut to save a day.</p>
+        </article>
+        <article class="mini mini--card reveal">
+          <span class="mini__ico"><%- icon('dollar', 24) %></span>
+          <h3>Be honest</h3>
+          <p>Fixed pricing, straight advice and a clear answer when a repair beats a replacement.</p>
+        </article>
+        <article class="mini mini--card reveal">
+          <span class="mini__ico"><%- icon('users', 24) %></span>
+          <h3>Respect the home</h3>
+          <p>Protected landscaping, tidy sites and a magnetic sweep before we leave.</p>
+        </article>
+        <article class="mini mini--card reveal">
+          <span class="mini__ico"><%- icon('award', 24) %></span>
+          <h3>Stand behind it</h3>
+          <p>A 10-year workmanship warranty on every installation, in writing.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Our experts team</p>
+        <h2>Safety, Craftsmanship &amp; Reliability</h2>
+        <p class="section-head__text">Meet the people responsible for every roof we build.</p>
+      </div>
+      <div class="grid grid--3">
+        <% team.forEach(function (m) { %>
+        <article class="team-card reveal">
+          <img src="<%= m.image %>" alt="<%= m.name %>, <%= m.role %> at <%= site.name %>" width="1024" height="1536" loading="lazy" decoding="async">
+          <div class="team-card__body">
+            <h3><%= m.name %></h3>
+            <p class="team-card__role"><%= m.role %></p>
+            <p class="team-card__bio"><%= m.bio %></p>
+            <p class="team-card__cred"><%- icon('award', 15) %> <%= m.credentials %></p>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container split split--reverse">
+      <div class="split__media reveal">
+        <img src="/img/service-commercial-roofing.webp" alt="Roofex commercial roofing crew working on a flat roof" width="1536" height="1024" loading="lazy" decoding="async">
+      </div>
+      <div class="split__body reveal">
+        <p class="eyebrow">Credentials &amp; safety</p>
+        <h2>Certified, insured and safety-first</h2>
+        <p>
+          Roofing is one of the most hazardous trades in construction. We take that seriously — for our crews and
+          for your property.
+        </p>
+        <ul class="tick-list">
+          <li><%- icon('check', 18) %> <%= site.license %></li>
+          <li><%- icon('check', 18) %> <%= site.insurance %></li>
+          <li><%- icon('check', 18) %> OSHA-certified crews and daily site safety briefings</li>
+          <li><%- icon('check', 18) %> Fall-protection systems on every project</li>
+          <li><%- icon('check', 18) %> Manufacturer-certified installation for all major brands</li>
+          <li><%- icon('check', 18) %> Fully documented job files for every completed roof</li>
+        </ul>
+        <a class="btn btn--dark" href="/contact">Work With Us <%- icon('arrow', 18) %></a>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

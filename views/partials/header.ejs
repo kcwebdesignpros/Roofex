@@ -1,0 +1,129 @@
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="topbar">
+  <div class="container topbar__inner">
+    <ul class="topbar__list">
+      <li><%- icon('phone', 15) %> <a href="tel:<%= site.phoneHref %>"><%= site.phone %></a></li>
+      <li><%- icon('mail', 15) %> <a href="mailto:<%= site.email %>"><%= site.email %></a></li>
+      <li class="topbar__hide-sm"><%- icon('pin', 15) %> <%= site.address.city %>, <%= site.address.region %></li>
+      <li class="topbar__hide-md"><%- icon('clock', 15) %> Mon–Fri 7am–6pm · 24/7 Emergency</li>
+    </ul>
+    <ul class="topbar__social">
+      <li><a href="<%= site.social.facebook %>" aria-label="Facebook" rel="noopener" target="_blank"><%- icon('facebook', 15) %></a></li>
+      <li><a href="<%= site.social.instagram %>" aria-label="Instagram" rel="noopener" target="_blank"><%- icon('instagram', 15) %></a></li>
+      <li><a href="<%= site.social.linkedin %>" aria-label="LinkedIn" rel="noopener" target="_blank"><%- icon('linkedin', 15) %></a></li>
+      <li><a href="<%= site.social.youtube %>" aria-label="YouTube" rel="noopener" target="_blank"><%- icon('youtube', 15) %></a></li>
+    </ul>
+  </div>
+</div>
+
+<header class="site-header" id="siteHeader">
+  <div class="container header__inner">
+    <a class="brand" href="/" aria-label="<%= site.name %> home">
+      <img src="/img/logo.webp" alt="<%= site.name %> roofing logo" width="125" height="50" fetchpriority="high">
+    </a>
+
+    <nav class="nav" id="primaryNav" aria-label="Primary">
+
+      <!-- Drawer header: logo + close (mobile only) -->
+      <div class="nav__head">
+        <a class="nav__brand" href="/" aria-label="<%= site.name %> home">
+          <img src="/img/logo.webp" alt="<%= site.name %>" width="111" height="44">
+        </a>
+        <button class="nav__close" id="navClose" type="button" aria-label="Close menu">
+          <%- icon('close', 20) %>
+        </button>
+      </div>
+
+      <div class="nav__body">
+        <p class="nav__label">Menu</p>
+        <ul class="nav__list">
+          <% site.nav.forEach(function (item) { %>
+          <% if (item.mega) { %>
+          <li class="nav__item nav__item--has-menu">
+            <div class="nav__row">
+              <a class="nav__link <%= isActive(item.url) ? 'is-active' : '' %>" href="<%= item.url %>" <%= isActive(item.url) ? 'aria-current="page"' : '' %> aria-haspopup="true"><%= item.label %></a>
+              <button class="nav__sub-toggle" id="servicesToggle" type="button" aria-expanded="false" aria-controls="servicesMenu" aria-label="Show all services">
+                <%- icon('chevron', 18) %>
+              </button>
+            </div>
+            <div class="dropdown" id="servicesMenu">
+              <ul class="dropdown__list">
+                <% services.forEach(function (s) { %>
+                <li>
+                  <a class="dropdown__item" href="/services/<%= s.slug %>">
+                    <span class="dropdown__ico"><%- icon(s.icon, 18) %></span>
+                    <span class="dropdown__txt">
+                      <strong><%= s.title %></strong>
+                      <small><%= s.excerpt.length > 62 ? s.excerpt.slice(0, 62) + '…' : s.excerpt %></small>
+                    </span>
+                  </a>
+                </li>
+                <% }); %>
+                <li class="dropdown__foot">
+                  <a href="/services"><%- icon('grid', 16) %> View all services <%- icon('arrow', 15) %></a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <% } else { %>
+          <li class="nav__item">
+            <a class="nav__link <%= isActive(item.url) ? 'is-active' : '' %>" href="<%= item.url %>" <%= isActive(item.url) ? 'aria-current="page"' : '' %>><%= item.label %></a>
+          </li>
+          <% } %>
+          <% }); %>
+        </ul>
+
+        <!-- Drawer contact block (mobile only) -->
+        <div class="nav__info">
+          <p class="nav__label">Get in touch</p>
+          <a class="nav__phone" href="tel:<%= site.phoneHref %>">
+            <span class="nav__phone-ico"><%- icon('phone', 18) %></span>
+            <span class="nav__phone-txt">
+              <small>Call us today</small>
+              <strong><%= site.phone %></strong>
+            </span>
+          </a>
+          <a class="nav__phone nav__phone--alert" href="tel:<%= site.emergencyPhone.replace(/[^0-9+]/g, '') %>">
+            <span class="nav__phone-ico"><%- icon('siren', 18) %></span>
+            <span class="nav__phone-txt">
+              <small>24/7 emergency</small>
+              <strong><%= site.emergencyPhone %></strong>
+            </span>
+          </a>
+          <ul class="nav__meta">
+            <li><%- icon('pin', 15) %> <%= site.address.city %>, <%= site.address.region %> · <%= site.address.postalCode %></li>
+            <li><%- icon('mail', 15) %> <a href="mailto:<%= site.email %>"><%= site.email %></a></li>
+            <li><%- icon('clock', 15) %> Mon–Fri 7am–6pm</li>
+          </ul>
+          <ul class="nav__social">
+            <li><a href="<%= site.social.facebook %>" aria-label="Facebook" rel="noopener" target="_blank"><%- icon('facebook', 16) %></a></li>
+            <li><a href="<%= site.social.instagram %>" aria-label="Instagram" rel="noopener" target="_blank"><%- icon('instagram', 16) %></a></li>
+            <li><a href="<%= site.social.linkedin %>" aria-label="LinkedIn" rel="noopener" target="_blank"><%- icon('linkedin', 16) %></a></li>
+            <li><a href="<%= site.social.youtube %>" aria-label="YouTube" rel="noopener" target="_blank"><%- icon('youtube', 16) %></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Drawer CTAs (mobile only) -->
+      <div class="nav__actions">
+        <a class="btn btn--primary btn--block" href="/contact">Get a Free Quote <%- icon('arrow', 17) %></a>
+        <a class="btn btn--outline btn--block" href="tel:<%= site.phoneHref %>"><%- icon('phone', 16) %> Call <%= site.phone %></a>
+      </div>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__call" href="tel:<%= site.phoneHref %>">
+        <span class="header__call-ico"><%- icon('phone', 18) %></span>
+        <span class="header__call-txt">
+          <small>Call us today</small>
+          <strong><%= site.phone %></strong>
+        </span>
+      </a>
+      <a class="btn btn--primary btn--sm header__cta" href="/contact">Free Quote</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+        <span class="nav-toggle__bars" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>

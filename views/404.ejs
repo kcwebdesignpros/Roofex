@@ -1,0 +1,35 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <section class="error-page">
+    <div class="container narrow">
+      <p class="error-page__code">404</p>
+      <h1>This page has sprung a leak</h1>
+      <p>
+        We could not find the page you were looking for. It may have been moved, renamed or never existed — but our
+        roofs, unlike this URL, never leak.
+      </p>
+      <div class="btn-row btn-row--center">
+        <a class="btn btn--primary btn--lg" href="/">Back to Home</a>
+        <a class="btn btn--outline btn--lg" href="/contact">Contact Us</a>
+      </div>
+
+      <div class="error-page__links">
+        <h2>Popular pages</h2>
+        <ul class="area-list reveal">
+          <li><a href="/services"><%- icon('layers', 15) %> All Services</a></li>
+          <li><a href="/services/roof-repair"><%- icon('wrench', 15) %> Roof Repair</a></li>
+          <li><a href="/services/roof-installation"><%- icon('home', 15) %> Roof Replacement</a></li>
+          <li><a href="/blog"><%- icon('search', 15) %> Roofing Blog</a></li>
+          <li><a href="/faq"><%- icon('quote', 15) %> FAQs</a></li>
+          <li><a href="/contact"><%- icon('mail', 15) %> Free Estimate</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

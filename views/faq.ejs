@@ -1,0 +1,43 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'FAQ', url: '/faq' }],
+        heroTitle: 'Roofing FAQs',
+        heroText: 'Honest answers to the questions we are asked most — costs, timelines, warranties and insurance.'
+      }) %>
+
+  <section class="section">
+    <div class="container narrow">
+      <div class="faq reveal">
+        <% faqs.forEach(function (f, i) { %>
+        <details class="faq__item"<%= i === 0 ? ' open' : '' %>>
+          <summary><span><%= f.q %></span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__answer"><p><%= f.a %></p></div>
+        </details>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Still have questions?</p>
+        <h2>Talk to a real roofer, not a call centre</h2>
+        <p class="section-head__text">
+          Call us, email us or send a message — you will speak to someone who actually works on roofs.
+        </p>
+        <div class="btn-row btn-row--center">
+          <a class="btn btn--primary btn--lg" href="/contact">Send a Message</a>
+          <a class="btn btn--outline btn--lg" href="tel:<%= site.phoneHref %>"><%- icon('phone', 18) %> <%= site.phone %></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

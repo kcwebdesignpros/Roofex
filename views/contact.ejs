@@ -1,0 +1,127 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'Contact', url: '/contact' }],
+        heroTitle: 'Contact Roofex',
+        heroText: 'Free estimates, honest advice and 24/7 emergency response across the Kansas City metro.'
+      }) %>
+
+  <section class="section">
+    <div class="container split">
+      <div class="split__body reveal">
+        <p class="eyebrow">Get in touch</p>
+        <h2>Have questions? Contact us today</h2>
+        <p>
+          Tell us about your roof and we will arrange a free inspection at a time that suits you. Prefer to talk
+          it through? Call us — a real person answers, and our emergency line is open around the clock.
+        </p>
+
+        <ul class="contact-list">
+          <li>
+            <span class="contact-list__ico"><%- icon('phone', 20) %></span>
+            <div><strong>Phone</strong><a href="tel:<%= site.phoneHref %>"><%= site.phone %></a></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('siren', 20) %></span>
+            <div><strong>24/7 Emergency</strong><a href="tel:<%= site.emergencyPhone.replace(/[^0-9+]/g, '') %>"><%= site.emergencyPhone %></a></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('mail', 20) %></span>
+            <div><strong>Email</strong><a href="mailto:<%= site.email %>"><%= site.email %></a></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('pin', 20) %></span>
+            <div><strong>Office</strong><span><%= site.address.street %>, <%= site.address.city %>, <%= site.address.region %> <%= site.address.postalCode %></span></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('shield', 20) %></span>
+            <div><strong>Credentials</strong><span><%= site.license %><br><%= site.insurance %></span></div>
+          </li>
+        </ul>
+
+        <div class="hours">
+          <h3><%- icon('clock', 18) %> Business Hours</h3>
+          <ul>
+            <% site.hours.forEach(function (h) { %>
+            <li><span><%= h.days %></span><strong><%= h.time %></strong></li>
+            <% }); %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="split__form">
+        <div class="card-form">
+          <% if (sent) { %>
+          <div class="alert alert--success" role="status">
+            <span class="alert__ico"><%- icon('check', 22) %></span>
+            <div>
+              <h2>Thank you — your message is on its way</h2>
+              <p>One of our roofing advisors will be in touch within one business day. For anything urgent, call <a href="tel:<%= site.phoneHref %>"><%= site.phone %></a>.</p>
+            </div>
+          </div>
+          <a class="btn btn--dark btn--block" href="/">Back to Home</a>
+          <% } else { %>
+          <h2>Send us a message</h2>
+          <p class="card-form__sub">Fill in the form and we will reply within one business day.</p>
+
+          <% if (error) { %>
+          <div class="alert alert--error" role="alert"><span class="alert__ico"><%- icon('close', 20) %></span><p><%= error %></p></div>
+          <% } %>
+
+          <form class="form" method="post" action="/contact" novalidate>
+            <div class="form__grid">
+              <div class="form__row">
+                <label for="name">Full name *</label>
+                <input class="form__input" id="name" name="name" type="text" value="<%= form.name || '' %>" placeholder="Jane Doe" required>
+              </div>
+              <div class="form__row">
+                <label for="email">Email address *</label>
+                <input class="form__input" id="email" name="email" type="email" value="<%= form.email || '' %>" placeholder="jane@example.com" required>
+              </div>
+              <div class="form__row">
+                <label for="phone">Phone number</label>
+                <input class="form__input" id="phone" name="phone" type="tel" value="<%= form.phone || '' %>" placeholder="(555) 000-0000">
+              </div>
+              <div class="form__row">
+                <label for="service">Service needed</label>
+                <select class="form__input" id="service" name="service">
+                  <option value="">Select a service…</option>
+                  <% services.forEach(function (s) { %>
+                  <option value="<%= s.title %>" <%= form.service === s.title ? 'selected' : '' %>><%= s.title %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+            <div class="form__row">
+              <label for="message">Project details *</label>
+              <textarea class="form__input" id="message" name="message" rows="5" placeholder="Tell us about your roof — its age, the problem and what you need…" required><%= form.message || '' %></textarea>
+            </div>
+            <button class="btn btn--primary btn--block btn--lg" type="submit">Send Message</button>
+            <p class="form__note">By submitting you agree to our <a href="/privacy-policy">Privacy Policy</a>. We never share your details.</p>
+          </form>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Service area</p>
+        <h2>We cover the <%= site.address.city %> metro &amp; surrounding communities</h2>
+      </div>
+      <ul class="area-list reveal">
+        <% site.serviceArea.forEach(function (city) { %>
+        <li><%- icon('pin', 15) %> <%= city %></li>
+        <% }); %>
+      </ul>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

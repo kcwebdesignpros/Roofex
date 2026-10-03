@@ -1,0 +1,91 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'Services', url: '/services' }],
+        heroTitle: 'Roofing Services',
+        heroText: 'Complete residential and commercial roofing — installation, repair, inspection, gutters, storm restoration and 24/7 emergency response.'
+      }) %>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Everything under one roof</p>
+        <h2>Specialist Roofing Services for Every Property</h2>
+        <p class="section-head__text">
+          Whatever your roof needs — a single repair, a full replacement or an annual inspection — Roofex has a
+          dedicated team and a documented process for it. Every service below is delivered by specialists, backed
+          by a written warranty.
+        </p>
+      </div>
+
+      <div class="grid grid--3">
+        <% services.forEach(function (s) { %>
+        <article class="svc-card reveal">
+          <a class="svc-card__media" href="/services/<%= s.slug %>" aria-hidden="true" tabindex="-1">
+            <img src="<%= s.cardImage %>" alt="<%= s.title %> services in <%= site.address.city %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+          </a>
+          <div class="svc-card__body">
+            <span class="svc-card__ico"><%- icon(s.icon, 22) %></span>
+            <h3><a href="/services/<%= s.slug %>"><%= s.title %></a></h3>
+            <p><%= s.excerpt %></p>
+            <p class="svc-card__price">From <strong><%= s.priceFrom %></strong></p>
+            <span class="svc-card__more">Learn more <%- icon('arrow', 16) %></span>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow eyebrow--light">Our promise</p>
+        <h2>What every Roofex project includes</h2>
+        <p class="section-head__text">No matter which service you choose, these standards never change.</p>
+      </div>
+      <div class="grid grid--4">
+        <article class="mini mini--dark reveal">
+          <span class="mini__ico"><%- icon('search', 24) %></span>
+          <h3>Free Inspection</h3>
+          <p>A thorough, photo-documented assessment before any work is quoted.</p>
+        </article>
+        <article class="mini mini--dark reveal">
+          <span class="mini__ico"><%- icon('tag', 24) %></span>
+          <h3>Fixed Pricing</h3>
+          <p>A written, itemised quote. The price we agree is the price you pay.</p>
+        </article>
+        <article class="mini mini--dark reveal">
+          <span class="mini__ico"><%- icon('shield', 24) %></span>
+          <h3>10-Year Warranty</h3>
+          <p>Our workmanship warranty, plus the manufacturer’s material warranty.</p>
+        </article>
+        <article class="mini mini--dark reveal">
+          <span class="mini__ico"><%- icon('check', 24) %></span>
+          <h3>Spotless Handover</h3>
+          <p>Protected landscaping, magnetic nail sweep and a full site clean-up.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Service area</p>
+        <h2>Roofing Services Across the <%= site.address.city %> Metro</h2>
+      </div>
+      <ul class="area-list reveal">
+        <% site.serviceArea.forEach(function (city) { %>
+        <li><%- icon('pin', 15) %> <%= city %></li>
+        <% }); %>
+      </ul>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

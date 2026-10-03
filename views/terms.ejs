@@ -1,0 +1,92 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'Terms of Service', url: '/terms' }],
+        heroTitle: 'Terms of Service',
+        heroText: 'The terms that govern the use of this website and the services we provide.'
+      }) %>
+
+  <section class="section">
+    <div class="container narrow">
+      <div class="prose">
+        <p><em>Last updated: <%= fmtDate(new Date().toISOString().split('T')[0]) %></em></p>
+
+        <h2>1. Acceptance of terms</h2>
+        <p>
+          By accessing or using this website you agree to these Terms of Service. If you do not agree, please do not
+          use the site. The site is operated by <%= site.legalName %>.
+        </p>
+
+        <h2>2. Information on this website</h2>
+        <p>
+          Content on this website — including service descriptions, guides, blog articles and pricing indications —
+          is provided for general information only. Indicative prices are starting points and are not a quotation.
+          A binding price is only established in a written, signed proposal following an on-site inspection.
+        </p>
+
+        <h2>3. Estimates and quotations</h2>
+        <ul>
+          <li>All estimates are free and carry no obligation.</li>
+          <li>Written quotations are valid for the period stated on the quotation.</li>
+          <li>Quotations assume the scope described at inspection; unforeseen conditions (such as concealed decking damage) may require a written variation agreed with you before work proceeds.</li>
+        </ul>
+
+        <h2>4. Scheduling and access</h2>
+        <p>
+          You agree to provide safe and reasonable access to the property for inspection and works. Timelines are
+          given in good faith but may be affected by weather, material availability and site conditions.
+        </p>
+
+        <h2>5. Warranties</h2>
+        <p>
+          We provide a workmanship warranty as stated in your contract, in addition to any manufacturer’s material
+          warranty. Warranties do not cover damage caused by storms, impact, third-party work, structural movement,
+          lack of maintenance, or alterations made by others after completion.
+        </p>
+
+        <h2>6. Payments</h2>
+        <p>
+          Payment terms are set out in your written contract. Deposits may be required to schedule work and to order
+          materials. Invoices are payable in accordance with the terms stated on the invoice.
+        </p>
+
+        <h2>7. Limitation of liability</h2>
+        <p>
+          To the fullest extent permitted by law, <%= site.name %> shall not be liable for any indirect, incidental
+          or consequential loss arising from the use of this website or from information published on it. Nothing in
+          these terms limits liability that cannot lawfully be limited.
+        </p>
+
+        <h2>8. Intellectual property</h2>
+        <p>
+          All content on this website, including text, graphics, logos and images, is owned by or licensed to
+          <%= site.name %> and may not be reproduced without written permission.
+        </p>
+
+        <h2>9. Third-party links</h2>
+        <p>
+          This website may contain links to third-party sites. We are not responsible for the content, accuracy or
+          practices of those sites.
+        </p>
+
+        <h2>10. Governing law</h2>
+        <p>
+          These terms are governed by the laws of the State of <%= site.address.regionName %>, United States, and any
+          dispute shall be subject to the exclusive jurisdiction of the courts of that state.
+        </p>
+
+        <h2>11. Contact</h2>
+        <p>
+          Questions about these terms? Email <a href="mailto:<%= site.email %>"><%= site.email %></a> or call
+          <a href="tel:<%= site.phoneHref %>"><%= site.phone %></a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

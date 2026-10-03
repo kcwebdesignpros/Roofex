@@ -1,0 +1,12 @@
+# Normalise line endings so the repo behaves identically on Windows, macOS and Linux
+# (Vercel/Hostinger build on Linux — LF keeps everything consistent).
+* text=auto eol=lf
+
+# Binary assets — never touch these
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary

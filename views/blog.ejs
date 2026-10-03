@@ -1,0 +1,52 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'Blog', url: '/blog' }],
+        heroTitle: 'Roofing Blog & Advice',
+        heroText: 'Straight-talking guides from the Roofex team — costs, materials, maintenance and storm damage, explained without the jargon.'
+      }) %>
+
+  <section class="section">
+    <div class="container">
+      <form class="blog-search" method="get" action="/blog" role="search">
+        <label class="sr-only" for="q">Search articles</label>
+        <input class="form__input" id="q" name="q" type="search" value="<%= query %>" placeholder="Search roofing articles…">
+        <button class="btn btn--dark" type="submit">Search</button>
+      </form>
+
+      <% if (query) { %>
+      <p class="blog-search__result">
+        <%= list.length %> article<%= list.length === 1 ? '' : 's' %> found for “<%= query %>”.
+        <a href="/blog">Clear search</a>
+      </p>
+      <% } %>
+
+      <% if (!list.length) { %>
+      <p class="center-text">No articles matched your search. <a href="/blog">Browse all articles</a> or <a href="/contact">ask us directly</a>.</p>
+      <% } else { %>
+      <div class="grid grid--3">
+        <% list.forEach(function (p) { %>
+        <article class="post-card reveal">
+          <a class="post-card__media" href="/blog/<%= p.slug %>" aria-hidden="true" tabindex="-1">
+            <img src="<%= p.image %>" alt="<%= p.title %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <span class="post-card__cat"><%= p.category %></span>
+          </a>
+          <div class="post-card__body">
+            <p class="post-card__meta"><%- icon('calendar', 14) %> <time datetime="<%= p.date %>"><%= fmtDate(p.date) %></time> · <%= p.readingTime %></p>
+            <h3><a href="/blog/<%= p.slug %>"><%= p.title %></a></h3>
+            <p><%= p.excerpt %></p>
+            <a class="link-arrow" href="/blog/<%= p.slug %>">Read article <%- icon('arrow', 15) %></a>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+      <% } %>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

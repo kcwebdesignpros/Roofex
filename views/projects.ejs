@@ -1,0 +1,58 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [{ name: 'Home', url: '/' }, { name: 'Projects', url: '/projects' }],
+        heroTitle: 'Our Roofing Projects',
+        heroText: 'A selection of recent residential, commercial and storm-restoration roofs completed across the Kansas City metro.'
+      }) %>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Recent work</p>
+        <h2>Roofs we are proud to put our name on</h2>
+        <p class="section-head__text">
+          Every project below was inspected, specified, installed and warrantied by the Roofex team. No
+          subcontractors, no shortcuts — just documented craftsmanship.
+        </p>
+      </div>
+
+      <div class="grid grid--3">
+        <% projects.forEach(function (p) { %>
+        <article class="project-card reveal">
+          <div class="project-card__media">
+            <img src="<%= p.image %>" alt="<%= p.title %> — <%= p.location %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <span class="project-card__tag"><%= p.category %></span>
+          </div>
+          <div class="project-card__body">
+            <p class="project-card__meta"><%- icon('pin', 14) %> <%= p.location %> · <%= p.year %></p>
+            <h3><%= p.title %></h3>
+            <p><%= p.summary %></p>
+            <ul class="project-card__facts">
+              <% Object.entries(p.facts).forEach(function (f) { %>
+              <li><span><%= f[0] %></span><strong><%= f[1] %></strong></li>
+              <% }); %>
+            </ul>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <ul class="stats reveal" data-count-group>
+        <% site.stats.forEach(function (s) { %>
+        <li class="stats__item"><strong data-count="<%= s.count %>" data-suffix="<%= s.suffix %>"><%= s.value %></strong><span><%= s.label %></span></li>
+        <% }); %>
+      </ul>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>

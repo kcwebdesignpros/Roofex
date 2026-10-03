@@ -1,0 +1,445 @@
+<%- include('partials/head') %>
+
+<%
+  const featured = ['residential-roofing', 'commercial-roofing', 'roof-repair']
+    .map(function (s) { return services.find(function (x) { return x.slug === s; }); })
+    .filter(Boolean);
+
+  const testimonials = [
+    { name: 'Rebecca Lawson', role: 'Homeowner · Brookside', text: 'Roofex replaced our roof in two days and the crew was immaculate. They tarped the garden, swept for nails twice and the price never changed from the quote. Easily the most professional trade we have ever hired.' },
+    { name: 'Marcus Whitfield', role: 'Property Manager · Corporate Woods', text: 'They re-roofed 40,000 sq ft around our tenants without a single complaint. Daily photos, clear reporting and finished ahead of schedule. We have moved our whole portfolio to Roofex.' },
+    { name: 'Anita Cruz', role: 'Homeowner · Independence', text: 'After the hailstorm I had no idea if we had damage. Roofex documented everything, met our adjuster and handled the whole claim. Our new roof cost us only the deductible.' },
+  ];
+%>
+
+<%- include('partials/header') %>
+
+<main id="main">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero__bg" role="img" aria-label="Roofex roofers installing a new shingle roof at sunset"></div>
+    <div class="hero__overlay"></div>
+    <div class="container hero__inner">
+      <div class="hero__content">
+        <p class="eyebrow">Licensed &amp; insured · <%= site.address.city %>, <%= site.address.region %></p>
+        <h1 class="hero__title">Rise Above the Rest<br>With Our Roofing</h1>
+        <p class="hero__text">
+          Premium residential and commercial roofing, installed as a complete system and backed by a
+          10-year workmanship warranty. Free inspection, fixed pricing and crews that treat your home like their own.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary btn--lg" href="/contact">Get a Free Estimate <%- icon('arrow', 18) %></a>
+          <a class="btn btn--ghost btn--lg" href="/services">Explore Our Services</a>
+        </div>
+        <ul class="hero__trust">
+          <li><%- icon('shield', 18) %> 10-Year Workmanship Warranty</li>
+          <li><%- icon('award', 18) %> GAF Master Elite® Contractor</li>
+          <li><%- icon('clock', 18) %> 24/7 Emergency Response</li>
+        </ul>
+      </div>
+
+      <aside class="hero__card">
+        <h2 class="hero__card-title">Request Your Free Roof Inspection</h2>
+        <p class="hero__card-sub">Photo-documented report. No obligation.</p>
+        <form class="form" method="post" action="/contact" novalidate>
+          <div class="form__row">
+            <label class="sr-only" for="h-name">Full name</label>
+            <input class="form__input" id="h-name" name="name" type="text" placeholder="Full name" required>
+          </div>
+          <div class="form__row">
+            <label class="sr-only" for="h-email">Email address</label>
+            <input class="form__input" id="h-email" name="email" type="email" placeholder="Email address" required>
+          </div>
+          <div class="form__row">
+            <label class="sr-only" for="h-phone">Phone number</label>
+            <input class="form__input" id="h-phone" name="phone" type="tel" placeholder="Phone number">
+          </div>
+          <div class="form__row">
+            <label class="sr-only" for="h-service">Service needed</label>
+            <select class="form__input" id="h-service" name="service">
+              <option value="">Service needed…</option>
+              <% services.forEach(function (s) { %><option value="<%= s.title %>"><%= s.title %></option><% }); %>
+            </select>
+          </div>
+          <div class="form__row">
+            <label class="sr-only" for="h-message">Project details</label>
+            <textarea class="form__input" id="h-message" name="message" rows="3" placeholder="Tell us briefly about your roof…" required></textarea>
+          </div>
+          <button class="btn btn--primary btn--block" type="submit">Get My Free Quote</button>
+          <p class="form__note">Or call <a href="tel:<%= site.phoneHref %>"><%= site.phone %></a> — we reply within one business day.</p>
+        </form>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===================== CERTIFICATIONS MARQUEE ===================== -->
+  <section class="section section--sm certs" aria-label="Certifications and accreditations">
+    <div class="container">
+      <div class="marquee">
+        <div class="marquee__track">
+          <% site.certifications.forEach(function (c) { %>
+          <span class="marquee__item"><%- icon('award', 18) %> <%= c %></span>
+          <% }); %>
+          <% site.certifications.forEach(function (c) { %>
+          <span class="marquee__item" aria-hidden="true"><%- icon('award', 18) %> <%= c %></span>
+          <% }); %>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ABOUT / WHY ===================== -->
+  <section class="section" id="about-strip">
+    <div class="container split">
+      <div class="split__media reveal">
+        <img src="/img/about-roofex.webp" alt="Roofex roofer installing shingles on a residential roof" width="1254" height="1254" loading="lazy" decoding="async">
+        <div class="split__badge">
+          <strong><%= site.founded %></strong>
+          <span>Serving Since</span>
+        </div>
+      </div>
+      <div class="split__body reveal">
+        <p class="eyebrow">About <%= site.name %></p>
+        <h2>Experience the highest quality in roof care</h2>
+        <p>
+          For more than fifteen years, Roofex has protected homes and commercial buildings across the
+          <%= site.address.city %> metro. We are not a storm-chasing outfit — we are a local, family-run
+          roofing company that lives on repeat customers and referrals.
+        </p>
+        <p>
+          Every roof we build starts with an honest inspection and ends with a written warranty. We use
+          premium materials, factory-certified crews and a documented process, because a roof is only as
+          good as the details you cannot see.
+        </p>
+        <ul class="tick-list">
+          <li><%- icon('check', 18) %> Free inspections with full photo documentation</li>
+          <li><%- icon('check', 18) %> Fixed, itemised pricing — no surprise extras</li>
+          <li><%- icon('check', 18) %> Certified installers for every major manufacturer</li>
+          <li><%- icon('check', 18) %> Insurance claim support from start to finish</li>
+        </ul>
+        <a class="btn btn--dark" href="/about">More About Us <%- icon('arrow', 18) %></a>
+      </div>
+    </div>
+
+    <div class="container">
+      <ul class="stats reveal" data-count-group>
+        <% site.stats.forEach(function (s) { %>
+        <li class="stats__item">
+          <strong data-count="<%= s.count %>" data-suffix="<%= s.suffix %>"><%= s.value %></strong>
+          <span><%= s.label %></span>
+        </li>
+        <% }); %>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICES GRID ===================== -->
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head reveal">
+        <p class="eyebrow">What we do</p>
+        <h2>The United Way to Find Specialist Services</h2>
+        <p class="section-head__text">
+          From a single missing shingle to a full commercial re-roof, every Roofex service is delivered by
+          specialists who do that job every day — not generalists learning on your roof.
+        </p>
+      </div>
+
+      <div class="grid grid--3">
+        <% services.forEach(function (s) { %>
+        <article class="svc-card reveal">
+          <a class="svc-card__media" href="/services/<%= s.slug %>" aria-hidden="true" tabindex="-1">
+            <img src="<%= s.cardImage %>" alt="<%= s.title %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+          </a>
+          <div class="svc-card__body">
+            <span class="svc-card__ico"><%- icon(s.icon, 22) %></span>
+            <h3><a href="/services/<%= s.slug %>"><%= s.title %></a></h3>
+            <p><%= s.excerpt %></p>
+            <span class="svc-card__more">Learn more <%- icon('arrow', 16) %></span>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FEATURED SERVICES ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--row reveal">
+        <div>
+          <p class="eyebrow">Expert roofing services</p>
+          <h2>Expert Roofing Services for Every Need</h2>
+        </div>
+        <a class="btn btn--outline" href="/services">All Services <%- icon('arrow', 16) %></a>
+      </div>
+
+      <div class="grid grid--3">
+        <% featured.forEach(function (s) { %>
+        <article class="feature-card reveal">
+          <img src="<%= s.image %>" alt="<%= s.title %> project by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+          <div class="feature-card__body">
+            <h3><a href="/services/<%= s.slug %>"><%= s.title %></a></h3>
+            <p><%= s.excerpt %></p>
+            <a class="link-arrow" href="/services/<%= s.slug %>">Read more <%- icon('arrow', 15) %></a>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESS ===================== -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow eyebrow--light">How it works</p>
+        <h2>Transform your roof into a work of art and protection</h2>
+        <p class="section-head__text">
+          A simple, transparent five-step process — from the first inspection to the final warranty, you always
+          know exactly what happens next.
+        </p>
+      </div>
+
+      <div class="steps">
+        <%
+          const steps = [
+            { n: '01', i: 'search',   t: 'Free Inspection',     d: 'We assess your roof, attic and flashing and document everything with photos.' },
+            { n: '02', i: 'tag',      t: 'Transparent Quote',   d: 'A written proposal with material options, timelines and fixed pricing.' },
+            { n: '03', i: 'layers',   t: 'Material Selection',  d: 'Choose shingles, metal or tile from samples delivered to your door.' },
+            { n: '04', i: 'tool',     t: 'Professional Install',d: 'Certified crews tear off, repair decking and install your new roof system.' },
+            { n: '05', i: 'shield',   t: 'Warranty & Handover', d: 'Final walkthrough, magnetic nail sweep and warranty registration.' }
+          ];
+        %>
+        <% steps.forEach(function (s) { %>
+        <article class="step reveal">
+          <span class="step__num"><%= s.n %></span>
+          <span class="step__ico"><%- icon(s.i, 26) %></span>
+          <h3><%= s.t %></h3>
+          <p><%= s.d %></p>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WHY CHOOSE ===================== -->
+  <section class="section">
+    <div class="container split split--reverse">
+      <div class="split__media reveal">
+        <img src="/img/service-roof-inspection.webp" alt="Roofex inspector checking a roof for leaks and storm damage" width="1536" height="1024" loading="lazy" decoding="async">
+      </div>
+      <div class="split__body reveal">
+        <p class="eyebrow">Why homeowners choose us</p>
+        <h2>Roofing done properly, priced honestly</h2>
+        <p>
+          Anyone can quote a low number. We would rather quote a fair one and stand behind it — which is why
+          98% of our work comes from repeat customers and referrals.
+        </p>
+        <div class="mini-grid">
+          <div class="mini">
+            <span class="mini__ico"><%- icon('shield', 22) %></span>
+            <h3>Warrantied Work</h3>
+            <p>10-year workmanship warranty on every installation and repair.</p>
+          </div>
+          <div class="mini">
+            <span class="mini__ico"><%- icon('dollar', 22) %></span>
+            <h3>Fixed Pricing</h3>
+            <p>Itemised, written quotes with no hidden extras — ever.</p>
+          </div>
+          <div class="mini">
+            <span class="mini__ico"><%- icon('users', 22) %></span>
+            <h3>Certified Crews</h3>
+            <p>OSHA-trained, factory-certified installers on every job.</p>
+          </div>
+          <div class="mini">
+            <span class="mini__ico"><%- icon('clock', 22) %></span>
+            <h3>24/7 Response</h3>
+            <p>Emergency tarping and leak control, day or night.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TEAM ===================== -->
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Our experts team</p>
+        <h2>Safety, Craftsmanship &amp; Reliability</h2>
+        <p class="section-head__text">
+          The people who will actually be on your roof — experienced, certified and accountable for their work.
+        </p>
+      </div>
+
+      <div class="grid grid--3">
+        <% team.forEach(function (m) { %>
+        <article class="team-card reveal">
+          <img src="<%= m.image %>" alt="<%= m.name %>, <%= m.role %> at <%= site.name %>" width="1024" height="1536" loading="lazy" decoding="async">
+          <div class="team-card__body">
+            <h3><%= m.name %></h3>
+            <p class="team-card__role"><%= m.role %></p>
+            <p class="team-card__bio"><%= m.bio %></p>
+            <p class="team-card__cred"><%- icon('award', 15) %> <%= m.credentials %></p>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIALS ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Customer reviews</p>
+        <h2>Rated 4.9 / 5 by 386 homeowners</h2>
+      </div>
+      <div class="grid grid--3">
+        <% testimonials.forEach(function (t) { %>
+        <figure class="quote-card reveal">
+          <span class="quote-card__mark"><%- icon('quote', 30) %></span>
+          <div class="stars" aria-label="5 out of 5 stars">
+            <% for (let i = 0; i < 5; i++) { %><%- icon('star', 16) %><% } %>
+          </div>
+          <blockquote><p><%= t.text %></p></blockquote>
+          <figcaption>
+            <strong><%= t.name %></strong>
+            <span><%= t.role %></span>
+          </figcaption>
+        </figure>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT ===================== -->
+  <section class="section section--tint" id="contact-home">
+    <div class="container split">
+      <div class="split__body reveal">
+        <p class="eyebrow">Have questions?</p>
+        <h2>Contact us — we would love to hear about your project</h2>
+        <p>
+          Whether you need an urgent leak repair or you are planning a full replacement next spring, our team
+          will give you straight answers and a clear plan. No pressure, no obligation.
+        </p>
+
+        <ul class="contact-list">
+          <li>
+            <span class="contact-list__ico"><%- icon('phone', 20) %></span>
+            <div><strong>Call us</strong><a href="tel:<%= site.phoneHref %>"><%= site.phone %></a></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('siren', 20) %></span>
+            <div><strong>24/7 Emergency</strong><a href="tel:<%= site.emergencyPhone.replace(/[^0-9+]/g, '') %>"><%= site.emergencyPhone %></a></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('mail', 20) %></span>
+            <div><strong>Email</strong><a href="mailto:<%= site.email %>"><%= site.email %></a></div>
+          </li>
+          <li>
+            <span class="contact-list__ico"><%- icon('pin', 20) %></span>
+            <div><strong>Office</strong><span><%= site.address.street %>, <%= site.address.city %>, <%= site.address.region %> <%= site.address.postalCode %></span></div>
+          </li>
+        </ul>
+
+        <div class="hours">
+          <h3><%- icon('clock', 18) %> Business Hours</h3>
+          <ul>
+            <% site.hours.forEach(function (h) { %>
+            <li><span><%= h.days %></span><strong><%= h.time %></strong></li>
+            <% }); %>
+          </ul>
+        </div>
+      </div>
+
+      <div class="split__form">
+        <div class="card-form">
+          <h2>Send us a message</h2>
+          <p class="card-form__sub">We reply within one business day.</p>
+          <form class="form" method="post" action="/contact" novalidate>
+            <div class="form__grid">
+              <div class="form__row">
+                <label for="c-name">Full name *</label>
+                <input class="form__input" id="c-name" name="name" type="text" placeholder="Jane Doe" required>
+              </div>
+              <div class="form__row">
+                <label for="c-email">Email *</label>
+                <input class="form__input" id="c-email" name="email" type="email" placeholder="jane@example.com" required>
+              </div>
+              <div class="form__row">
+                <label for="c-phone">Phone</label>
+                <input class="form__input" id="c-phone" name="phone" type="tel" placeholder="(555) 000-0000">
+              </div>
+              <div class="form__row">
+                <label for="c-service">Service needed</label>
+                <select class="form__input" id="c-service" name="service">
+                  <option value="">Select a service…</option>
+                  <% services.forEach(function (s) { %><option value="<%= s.title %>"><%= s.title %></option><% }); %>
+                </select>
+              </div>
+            </div>
+            <div class="form__row">
+              <label for="c-message">Project details *</label>
+              <textarea class="form__input" id="c-message" name="message" rows="4" placeholder="Tell us about your roof, its age and what you need…" required></textarea>
+            </div>
+            <button class="btn btn--primary btn--block btn--lg" type="submit">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BLOG ===================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--row reveal">
+        <div>
+          <p class="eyebrow">From the blog</p>
+          <h2>Read Our Latest Roofing News &amp; Advice</h2>
+        </div>
+        <a class="btn btn--outline" href="/blog">Visit the Blog <%- icon('arrow', 16) %></a>
+      </div>
+
+      <div class="grid grid--3">
+        <% recentPosts.forEach(function (p) { %>
+        <article class="post-card reveal">
+          <a class="post-card__media" href="/blog/<%= p.slug %>" aria-hidden="true" tabindex="-1">
+            <img src="<%= p.image %>" alt="<%= p.title %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <span class="post-card__cat"><%= p.category %></span>
+          </a>
+          <div class="post-card__body">
+            <p class="post-card__meta"><%- icon('calendar', 14) %> <time datetime="<%= p.date %>"><%= fmtDate(p.date) %></time> · <%= p.readingTime %></p>
+            <h3><a href="/blog/<%= p.slug %>"><%= p.title %></a></h3>
+            <p><%= p.excerpt %></p>
+            <a class="link-arrow" href="/blog/<%= p.slug %>">Read article <%- icon('arrow', 15) %></a>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SERVICE AREA ===================== -->
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Where we work</p>
+        <h2>Proudly Serving the <%= site.address.city %> Metro &amp; Surrounding Communities</h2>
+      </div>
+      <ul class="area-list reveal">
+        <% site.serviceArea.forEach(function (city) { %>
+        <li><%- icon('pin', 15) %> <%= city %></li>
+        <% }); %>
+      </ul>
+      <p class="center-text">Not sure if you are in our area? <a href="/contact">Send us a message</a> — we will let you know straight away.</p>
+    </div>
+  </section>
+
+  <%- include('partials/cta') %>
+
+</main>
+
+<%- include('partials/footer') %>

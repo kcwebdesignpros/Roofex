@@ -1,0 +1,59 @@
+<footer class="site-footer">
+  <div class="container footer__top">
+    <div class="footer__col footer__brand">
+      <img src="/img/logo.webp" alt="<%= site.name %>" width="146" height="58" loading="lazy">
+      <p><%= site.shortDescription %></p>
+      <ul class="footer__social">
+        <li><a href="<%= site.social.facebook %>" aria-label="Facebook" rel="noopener" target="_blank"><%- icon('facebook', 16) %></a></li>
+        <li><a href="<%= site.social.instagram %>" aria-label="Instagram" rel="noopener" target="_blank"><%- icon('instagram', 16) %></a></li>
+        <li><a href="<%= site.social.linkedin %>" aria-label="LinkedIn" rel="noopener" target="_blank"><%- icon('linkedin', 16) %></a></li>
+        <li><a href="<%= site.social.youtube %>" aria-label="YouTube" rel="noopener" target="_blank"><%- icon('youtube', 16) %></a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__title">Our Services</h3>
+      <ul class="footer__links">
+        <% services.slice(0, 6).forEach(function (s) { %>
+        <li><a href="/services/<%= s.slug %>"><%= s.title %></a></li>
+        <% }); %>
+        <li><a href="/services">View all services</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__title">Company</h3>
+      <ul class="footer__links">
+        <li><a href="/about">About Us</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/blog">Roofing Blog</a></li>
+        <li><a href="/faq">FAQs</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/privacy-policy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms of Service</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__col">
+      <h3 class="footer__title">Get In Touch</h3>
+      <ul class="footer__contact">
+        <li><%- icon('pin', 16) %><span><%= site.address.street %><br><%= site.address.city %>, <%= site.address.region %> <%= site.address.postalCode %></span></li>
+        <li><%- icon('phone', 16) %><span><a href="tel:<%= site.phoneHref %>"><%= site.phone %></a><br><small>24/7 emergency: <a href="tel:<%= site.emergencyPhone.replace(/[^0-9+]/g, '') %>"><%= site.emergencyPhone %></a></small></span></li>
+        <li><%- icon('mail', 16) %><a href="mailto:<%= site.email %>"><%= site.email %></a></li>
+        <li><%- icon('shield', 16) %><span><%= site.license %><br><small><%= site.insurance %></small></span></li>
+      </ul>
+      <a class="btn btn--primary btn--sm" href="/contact">Request a Free Estimate</a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>© <%= year %> <%= site.legalName %>. All rights reserved.</p>
+    <p class="footer__area">Serving <%= site.serviceArea.slice(0, 5).join(', ') %> &amp; the greater <%= site.address.city %> metro area.</p>
+  </div>
+</footer>
+
+<button class="to-top" id="toTop" aria-label="Back to top"><%- icon('arrow', 20) %></button>
+
+<script src="/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<%- include('partials/head') %>
+<%- include('partials/header') %>
+
+<main id="main">
+  <%- include('partials/page-hero', {
+        crumbs: [
+          { name: 'Home', url: '/' },
+          { name: 'Services', url: '/services' },
+          { name: service.title, url: '/services/' + service.slug }
+        ],
+        heroTitle: service.title,
+        heroText: service.heroIntro
+      }) %>
+
+  <section class="section">
+    <div class="container split">
+      <div class="split__media reveal">
+        <img src="<%= service.image %>" alt="<%= service.title %> in <%= site.address.city %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+        <div class="split__badge split__badge--price">
+          <span>Starting from</span>
+          <strong><%= service.priceFrom %></strong>
+        </div>
+      </div>
+      <div class="split__body reveal">
+        <p class="eyebrow">Overview</p>
+        <h2><%= service.title %> you can rely on</h2>
+        <% service.overview.forEach(function (p) { %>
+        <p><%= p %></p>
+        <% }); %>
+        <div class="btn-row">
+          <a class="btn btn--primary" href="/contact">Get a Free Quote <%- icon('arrow', 18) %></a>
+          <a class="btn btn--outline" href="tel:<%= site.phoneHref %>"><%- icon('phone', 17) %> <%= site.phone %></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">What’s included</p>
+        <h2>Everything covered by our <%= service.title.toLowerCase() %></h2>
+      </div>
+      <div class="grid grid--3">
+        <% service.features.forEach(function (f) { %>
+        <article class="mini mini--card reveal">
+          <span class="mini__ico"><%- icon('check', 22) %></span>
+          <h3><%= f.title %></h3>
+          <p><%= f.text %></p>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split split--reverse">
+      <div class="split__media reveal">
+        <img src="<%= service.cardImage %>" alt="<%= service.title %> benefits" width="1536" height="1024" loading="lazy" decoding="async">
+      </div>
+      <div class="split__body reveal">
+        <p class="eyebrow">Why choose Roofex</p>
+        <h2>The <%= site.name %> advantage</h2>
+        <ul class="tick-list tick-list--lg">
+          <% service.benefits.forEach(function (b) { %>
+          <li><%- icon('check', 20) %> <%= b %></li>
+          <% }); %>
+        </ul>
+        <p class="muted">
+          Every project is managed by a dedicated Roofex supervisor and documented from inspection to handover.
+          <%= site.license %> · <%= site.insurance %>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow eyebrow--light">Our process</p>
+        <h2>How our <%= service.title.toLowerCase() %> process works</h2>
+      </div>
+      <div class="steps steps--<%= service.process.length %>">
+        <% service.process.forEach(function (s, i) { %>
+        <article class="step reveal">
+          <span class="step__num"><%= String(i + 1).padStart(2, '0') %></span>
+          <span class="step__ico"><%- icon('check', 24) %></span>
+          <h3><%= s.title %></h3>
+          <p><%= s.text %></p>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container narrow">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Frequently asked</p>
+        <h2><%= service.title %> — your questions answered</h2>
+      </div>
+      <div class="faq reveal">
+        <% service.faqs.forEach(function (f, i) { %>
+        <details class="faq__item"<%= i === 0 ? ' open' : '' %>>
+          <summary><span><%= f.q %></span><span class="faq__icon" aria-hidden="true"></span></summary>
+          <div class="faq__answer"><p><%= f.a %></p></div>
+        </details>
+        <% }); %>
+      </div>
+      <p class="center-text">Still have a question? <a href="/contact">Contact our team</a> — we are happy to help.</p>
+    </div>
+  </section>
+
+  <% if (related.length) { %>
+  <section class="section section--tint">
+    <div class="container">
+      <div class="section-head section-head--center reveal">
+        <p class="eyebrow">Related services</p>
+        <h2>You may also need</h2>
+      </div>
+      <div class="grid grid--3">
+        <% related.forEach(function (r) { %>
+        <article class="svc-card svc-card--compact reveal">
+          <div class="svc-card__body">
+            <span class="svc-card__ico"><%- icon(r.icon, 22) %></span>
+            <h3><a href="/services/<%= r.slug %>"><%= r.title %></a></h3>
+            <p><%= r.excerpt %></p>
+            <span class="svc-card__more">Learn more <%- icon('arrow', 16) %></span>
+          </div>
+        </article>
+        <% }); %>
+      </div>
+    </div>
+  </section>
+  <% } %>
+
+  <%- include('partials/cta') %>
+</main>
+
+<%- include('partials/footer') %>
