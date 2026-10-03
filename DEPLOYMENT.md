@@ -130,6 +130,23 @@ Two details in `netlify.toml` are load-bearing and worth understanding:
 
 EJS templates are read from **disk at runtime**, not `require`d — so the bundler cannot discover them by itself. Without `included_files` every page fails with `Failed to lookup view "index"`.
 
+There is a second, subtler bundling trap that `server.js` already works around. Express does not `require('ejs')` directly — it resolves the engine lazily with a **dynamic** call:
+
+```js
+// express/lib/view.js, line ~81
+var fn = require(mod).__express;   // `mod` is a variable — invisible to bundlers
+```
+
+Because the argument is a variable, esbuild cannot statically detect it and leaves it as a runtime `require('ejs')`. Inside the bundled function there is no `node_modules`, so it throws `Cannot find module 'ejs'`. The fix is to register the engine up front, which makes Express skip that lookup entirely (`if (!opts.engines[this.ext])`):
+
+```js
+const ejs = require('ejs');            // static require → esbuild inlines it
+app.engine('ejs', ejs.__express);      // engine pre-registered → no dynamic require
+app.set('view engine', 'ejs');
+```
+
+This is also why `ejs` must stay in `dependencies` and the top-level `require('ejs')` must not be removed.
+
 ```toml
 [[redirects]]
   from = "/*"
@@ -200,6 +217,7 @@ Any push to `main` triggers an automatic build. Every pull request gets its own 
 | Symptom | Cause / fix |
 |---------|-------------|
 | `Failed to lookup view "index"` | `included_files` is missing or wrong in the `[functions]` block of `netlify.toml`. |
+| `Cannot find module 'ejs'` (or any view engine) | Express loads engines with a **dynamic** `require(mod).__express` that bundlers cannot detect, so the module is never inlined. Already fixed in `server.js` via `app.engine('ejs', ejs.__express)` — **do not remove that line**, and keep the top-level `require('ejs')` so the dependency stays statically analysable. |
 | Images return 404 | The build step didn't run. Check the build log for `✓ Copied N images to public/img`. |
 | Every page returns 502 | The function crashed. Netlify → **Functions → server → Logs** shows the stack trace. |
 | Only the homepage works | The `/*` redirect is missing, or `force = true` was added (which would also swallow `/css`, `/js` and `/img`). |

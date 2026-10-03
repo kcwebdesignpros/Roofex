@@ -12,6 +12,7 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const compression = require('compression');
+const ejs = require('ejs');
 
 const site = require('./data/site');
 const services = require('./data/services');
@@ -57,6 +58,19 @@ const BASE_URL = (process.env.SITE_URL || `http://localhost:${PORT}`).replace(/\
 /* ------------------------------------------------------------------ *
  * App configuration
  * ------------------------------------------------------------------ */
+// Register the EJS engine explicitly instead of relying on Express's lazy
+// `require(this.engine)` lookup in lib/view.js.
+//
+// That lookup is a DYNAMIC require — `require(mod).__express` where `mod` is a
+// variable — so bundlers (Netlify's esbuild, Vercel) cannot detect it and leave
+// it as a runtime call. Inside a bundled serverless function there is no
+// node_modules, so it throws: "Cannot find module 'ejs'".
+//
+// Express only performs that lookup when the engine is not already registered
+// (see `if (!opts.engines[this.ext])` in express/lib/view.js), so binding it
+// here removes the dynamic require entirely. It also keeps the dependency
+// statically analysable, so the bundler inlines ejs into the output.
+app.engine('ejs', ejs.__express);
 app.set('view engine', 'ejs');
 app.set('views', path.join(ROOT, 'views'));
 app.set('trust proxy', 1);
