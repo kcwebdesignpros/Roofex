@@ -179,6 +179,107 @@
     requestAnimationFrame(step);
   }
 
+  /* ---------------- Reviews carousel ---------------- */
+  document.querySelectorAll('[data-carousel]').forEach(function (root) {
+    var viewport = root.querySelector('[data-carousel-viewport]');
+    var track = root.querySelector('[data-carousel-track]');
+    if (!viewport || !track) return;
+
+    var slides = Array.prototype.slice.call(track.children);
+    if (slides.length < 2) return;
+
+    var prevBtn = root.querySelector('[data-carousel-prev]');
+    var nextBtn = root.querySelector('[data-carousel-next]');
+    var dots = Array.prototype.slice.call(root.querySelectorAll('[data-carousel-dot]'));
+
+    // Take over from the no-JS scroll fallback.
+    root.classList.add('carousel--js');
+
+    var index = 0;
+    var step = 0;
+    var maxIndex = 0;
+    var timer = null;
+
+    function metrics() {
+      var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+      var vw = viewport.getBoundingClientRect().width;
+      step = slides[0].getBoundingClientRect().width + gap;
+      if (step <= 0) step = vw;
+      var perView = Math.max(1, Math.round((vw + gap) / step));
+      maxIndex = Math.max(0, slides.length - perView);
+      if (index > maxIndex) index = maxIndex;
+    }
+
+    function render(animate) {
+      if (animate === false) track.style.transition = 'none';
+      track.style.transform = 'translate3d(' + (-index * step) + 'px,0,0)';
+      if (animate === false) {
+        void track.offsetWidth;      // flush so the next move animates again
+        track.style.transition = '';
+      }
+      dots.forEach(function (dot, i) {
+        var active = i === index;
+        dot.classList.toggle('is-active', active);
+        if (active) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+    }
+
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+
+    function start() {
+      stop();
+      if (reduceMotion || maxIndex === 0) return;
+      timer = setInterval(function () { go(index + 1); }, 5500);
+    }
+
+    function go(target) {
+      if (maxIndex === 0) return;
+      // Wrap around in both directions.
+      index = target < 0 ? maxIndex : (target > maxIndex ? 0 : target);
+      render(true);
+      start();
+    }
+
+    if (prevBtn) prevBtn.addEventListener('click', function () { go(index - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { go(index + 1); });
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { go(i); });
+    });
+
+    // Pause auto-advance while the user is looking at or tabbing through it.
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', start);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', start);
+
+    // Swipe on touch devices.
+    var startX = null;
+    viewport.addEventListener('touchstart', function (e) {
+      startX = e.touches[0].clientX;
+      stop();
+    }, { passive: true });
+    viewport.addEventListener('touchend', function (e) {
+      if (startX === null) return;
+      var dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 45) go(index + (dx < 0 ? 1 : -1));
+      startX = null;
+      start();
+    }, { passive: true });
+
+    var resizeTimer;
+    window.addEventListener('resize', function () {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(function () { metrics(); render(false); }, 150);
+    });
+
+    metrics();
+    render(false);
+    start();
+  });
+
   /* ---------------- Contact form: light client-side guard ---------------- */
   document.querySelectorAll('form.form').forEach(function (form) {
     form.addEventListener('submit', function (e) {

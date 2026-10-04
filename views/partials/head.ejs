@@ -46,7 +46,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"></noscript>
 
-  <% if (meta.preloadImage) { %><link rel="preload" as="image" href="<%= meta.preloadImage %>" fetchpriority="high"><% } %>
+  <% if (meta.preloadImage) { %><link rel="preload" as="image" href="<%= meta.preloadImage %>"<% if (meta.preloadSrcset) { %> imagesrcset="<%= meta.preloadSrcset %>" imagesizes="<%= meta.preloadSizes || '100vw' %>"<% } %> fetchpriority="high"><% } %>
   <link rel="stylesheet" href="/css/style.css">
 
   <!-- Structured data -->

@@ -15,7 +15,7 @@
   <section class="section">
     <div class="container split">
       <div class="split__media reveal">
-        <img src="<%= service.image %>" alt="<%= service.title %> in <%= site.address.city %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+        <img src="<%= service.image %>" srcset="<%= srcset(service.image) %>" sizes="<%= sizes.half %>" alt="<%= service.title %> in <%= site.address.city %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
         <div class="split__badge split__badge--price">
           <span>Starting from</span>
           <strong><%= service.priceFrom %></strong>
@@ -56,7 +56,7 @@
   <section class="section">
     <div class="container split split--reverse">
       <div class="split__media reveal">
-        <img src="<%= service.cardImage %>" alt="<%= service.title %> benefits" width="1536" height="1024" loading="lazy" decoding="async">
+        <img src="<%= service.cardImage %>" srcset="<%= srcset(service.cardImage) %>" sizes="<%= sizes.half %>" alt="<%= service.title %> benefits" width="1536" height="1024" loading="lazy" decoding="async">
       </div>
       <div class="split__body reveal">
         <p class="eyebrow">Why choose Roofex</p>

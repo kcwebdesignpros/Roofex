@@ -59,7 +59,7 @@
             <% related.forEach(function (r) { %>
             <li>
               <a href="/blog/<%= r.slug %>">
-                <img src="<%= r.image %>" alt="" width="120" height="90" loading="lazy" decoding="async">
+                <img src="<%= r.image %>" srcset="<%= srcset(r.image) %>" sizes="68px" alt="" width="120" height="90" loading="lazy" decoding="async">
                 <span><%= r.title %></span>
               </a>
             </li>

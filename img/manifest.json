@@ -1,0 +1,95 @@
+{
+  "hero-bg.webp": {
+    "natural": 1916,
+    "height": 821,
+    "variants": [
+      800,
+      1200
+    ]
+  },
+  "about-roofex.webp": {
+    "natural": 1254,
+    "height": 1254,
+    "variants": [
+      700
+    ]
+  },
+  "service-residential-roofing.webp": {
+    "natural": 1536,
+    "height": 1024,
+    "variants": [
+      480,
+      800,
+      1100
+    ]
+  },
+  "service-commercial-roofing.webp": {
+    "natural": 1536,
+    "height": 1024,
+    "variants": [
+      480,
+      800,
+      1100
+    ]
+  },
+  "service-roof-repair.webp": {
+    "natural": 1536,
+    "height": 1024,
+    "variants": [
+      480,
+      800,
+      1100
+    ]
+  },
+  "service-roof-installation.webp": {
+    "natural": 1536,
+    "height": 1024,
+    "variants": [
+      480,
+      800,
+      1100
+    ]
+  },
+  "service-roof-inspection.webp": {
+    "natural": 1536,
+    "height": 1024,
+    "variants": [
+      480,
+      800,
+      1100
+    ]
+  },
+  "service-gutters.webp": {
+    "natural": 1536,
+    "height": 1024,
+    "variants": [
+      480,
+      800,
+      1100
+    ]
+  },
+  "team-1.webp": {
+    "natural": 1024,
+    "height": 1536,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "team-2.webp": {
+    "natural": 1024,
+    "height": 1536,
+    "variants": [
+      480,
+      800
+    ]
+  },
+  "team-3.webp": {
+    "natural": 1024,
+    "height": 1536,
+    "variants": [
+      480,
+      800
+    ]
+  }
+}

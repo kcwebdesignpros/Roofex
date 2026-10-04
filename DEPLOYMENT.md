@@ -470,7 +470,8 @@ Roofing Website/
 ├── netlify/functions/
 │   └── server.js          # Netlify entry — wraps the app with serverless-http
 ├── scripts/
-│   └── prepare-netlify.js # Copies /img → /public/img for Netlify's CDN
+│   ├── prepare-netlify.js # Copies /img → /public/img for Netlify's CDN
+│   └── generate-image-variants.js  # Rebuilds responsive WebP variants + img/manifest.json
 ├── .env.example           # Environment variable template
 ├── .gitattributes         # LF normalisation + binary markers
 ├── package.json

@@ -48,7 +48,10 @@
 
   <div class="container footer__bottom">
     <p>© <%= year %> <%= site.legalName %>. All rights reserved.</p>
-    <p class="footer__area">Serving <%= site.serviceArea.slice(0, 5).join(', ') %> &amp; the greater <%= site.address.city %> metro area.</p>
+    <p class="footer__credit">
+      <%= site.credit.prefix %>
+      <a href="<%= site.credit.url %>" target="_blank" rel="noopener"><%= site.credit.name %></a>
+    </p>
   </div>
 </footer>
 

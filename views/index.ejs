@@ -4,12 +4,6 @@
   const featured = ['residential-roofing', 'commercial-roofing', 'roof-repair']
     .map(function (s) { return services.find(function (x) { return x.slug === s; }); })
     .filter(Boolean);
-
-  const testimonials = [
-    { name: 'Rebecca Lawson', role: 'Homeowner · Brookside', text: 'Roofex replaced our roof in two days and the crew was immaculate. They tarped the garden, swept for nails twice and the price never changed from the quote. Easily the most professional trade we have ever hired.' },
-    { name: 'Marcus Whitfield', role: 'Property Manager · Corporate Woods', text: 'They re-roofed 40,000 sq ft around our tenants without a single complaint. Daily photos, clear reporting and finished ahead of schedule. We have moved our whole portfolio to Roofex.' },
-    { name: 'Anita Cruz', role: 'Homeowner · Independence', text: 'After the hailstorm I had no idea if we had damage. Roofex documented everything, met our adjuster and handled the whole claim. Our new roof cost us only the deductible.' },
-  ];
 %>
 
 <%- include('partials/header') %>
@@ -18,7 +12,9 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="hero">
-    <div class="hero__bg" role="img" aria-label="Roofex roofers installing a new shingle roof at sunset"></div>
+    <img class="hero__bg" src="/img/hero-bg.webp"
+         srcset="<%= srcset('/img/hero-bg.webp') %>" sizes="<%= sizes.full %>"
+         alt="" width="1916" height="821" fetchpriority="high" decoding="async">
     <div class="hero__overlay"></div>
     <div class="container hero__inner">
       <div class="hero__content">
@@ -93,7 +89,7 @@
   <section class="section" id="about-strip">
     <div class="container split">
       <div class="split__media reveal">
-        <img src="/img/about-roofex.webp" alt="Roofex roofer installing shingles on a residential roof" width="1254" height="1254" loading="lazy" decoding="async">
+        <img src="/img/about-roofex.webp" srcset="<%= srcset('/img/about-roofex.webp') %>" sizes="<%= sizes.half %>" alt="Roofex roofer installing shingles on a residential roof" width="1254" height="1254" loading="lazy" decoding="async">
         <div class="split__badge">
           <strong><%= site.founded %></strong>
           <span>Serving Since</span>
@@ -150,7 +146,7 @@
         <% services.forEach(function (s) { %>
         <article class="svc-card reveal">
           <a class="svc-card__media" href="/services/<%= s.slug %>" aria-hidden="true" tabindex="-1">
-            <img src="<%= s.cardImage %>" alt="<%= s.title %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <img src="<%= s.cardImage %>" srcset="<%= srcset(s.cardImage) %>" sizes="<%= sizes.card3 %>" alt="<%= s.title %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
           </a>
           <div class="svc-card__body">
             <span class="svc-card__ico"><%- icon(s.icon, 22) %></span>
@@ -178,7 +174,7 @@
       <div class="grid grid--3">
         <% featured.forEach(function (s) { %>
         <article class="feature-card reveal">
-          <img src="<%= s.image %>" alt="<%= s.title %> project by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+          <img src="<%= s.image %>" srcset="<%= srcset(s.image) %>" sizes="<%= sizes.card3 %>" alt="<%= s.title %> project by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
           <div class="feature-card__body">
             <h3><a href="/services/<%= s.slug %>"><%= s.title %></a></h3>
             <p><%= s.excerpt %></p>
@@ -228,7 +224,7 @@
   <section class="section">
     <div class="container split split--reverse">
       <div class="split__media reveal">
-        <img src="/img/service-roof-inspection.webp" alt="Roofex inspector checking a roof for leaks and storm damage" width="1536" height="1024" loading="lazy" decoding="async">
+        <img src="/img/service-roof-inspection.webp" srcset="<%= srcset('/img/service-roof-inspection.webp') %>" sizes="<%= sizes.half %>" alt="Roofex inspector checking a roof for leaks and storm damage" width="1536" height="1024" loading="lazy" decoding="async">
       </div>
       <div class="split__body reveal">
         <p class="eyebrow">Why homeowners choose us</p>
@@ -277,7 +273,7 @@
       <div class="grid grid--3">
         <% team.forEach(function (m) { %>
         <article class="team-card reveal">
-          <img src="<%= m.image %>" alt="<%= m.name %>, <%= m.role %> at <%= site.name %>" width="1024" height="1536" loading="lazy" decoding="async">
+          <img src="<%= m.image %>" srcset="<%= srcset(m.image) %>" sizes="<%= sizes.card3 %>" alt="<%= m.name %>, <%= m.role %> at <%= site.name %>" width="1024" height="1536" loading="lazy" decoding="async">
           <div class="team-card__body">
             <h3><%= m.name %></h3>
             <p class="team-card__role"><%= m.role %></p>
@@ -291,26 +287,59 @@
   </section>
 
   <!-- ===================== TESTIMONIALS ===================== -->
-  <section class="section">
+  <section class="section" id="reviews">
     <div class="container">
       <div class="section-head section-head--center reveal">
         <p class="eyebrow">Customer reviews</p>
         <h2>Rated 4.9 / 5 by 386 homeowners</h2>
+        <p class="section-head__text">
+          Real feedback from homeowners and property managers across the Kansas City metro.
+        </p>
       </div>
-      <div class="grid grid--3">
-        <% testimonials.forEach(function (t) { %>
-        <figure class="quote-card reveal">
-          <span class="quote-card__mark"><%- icon('quote', 30) %></span>
-          <div class="stars" aria-label="5 out of 5 stars">
-            <% for (let i = 0; i < 5; i++) { %><%- icon('star', 16) %><% } %>
+    </div>
+
+    <div class="container">
+      <div class="carousel reveal" data-carousel aria-roledescription="carousel" aria-label="Customer reviews">
+        <div class="carousel__viewport" data-carousel-viewport>
+          <ul class="carousel__track" data-carousel-track>
+            <% testimonials.forEach(function (t, i) { %>
+            <li class="carousel__slide" role="group" aria-roledescription="slide" aria-label="Review <%= i + 1 %> of <%= testimonials.length %>">
+              <figure class="quote-card">
+                <span class="quote-card__mark"><%- icon('quote', 30) %></span>
+                <div class="stars" aria-label="Rated <%= t.rating %> out of 5">
+                  <% for (let s = 0; s < t.rating; s++) { %><%- icon('star', 15) %><% } %>
+                </div>
+                <blockquote><p><%= t.text %></p></blockquote>
+                <figcaption>
+                  <span class="quote-card__avatar" aria-hidden="true"><%= t.initials %></span>
+                  <span class="quote-card__who">
+                    <strong><%= t.name %></strong>
+                    <span><%= t.role %> · <%= t.location %></span>
+                  </span>
+                </figcaption>
+              </figure>
+            </li>
+            <% }); %>
+          </ul>
+        </div>
+
+        <div class="carousel__controls">
+          <button class="carousel__btn" type="button" data-carousel-prev aria-label="Previous reviews">
+            <%- icon('arrowLeft', 20) %>
+          </button>
+
+          <div class="carousel__dots">
+            <% testimonials.forEach(function (t, i) { %>
+            <button class="carousel__dot<%= i === 0 ? ' is-active' : '' %>" type="button"
+                    data-carousel-dot="<%= i %>" aria-label="Go to review <%= i + 1 %>"
+                    <%= i === 0 ? 'aria-current="true"' : '' %>></button>
+            <% }); %>
           </div>
-          <blockquote><p><%= t.text %></p></blockquote>
-          <figcaption>
-            <strong><%= t.name %></strong>
-            <span><%= t.role %></span>
-          </figcaption>
-        </figure>
-        <% }); %>
+
+          <button class="carousel__btn" type="button" data-carousel-next aria-label="Next reviews">
+            <%- icon('arrowRight', 20) %>
+          </button>
+        </div>
       </div>
     </div>
   </section>
@@ -407,7 +436,7 @@
         <% recentPosts.forEach(function (p) { %>
         <article class="post-card reveal">
           <a class="post-card__media" href="/blog/<%= p.slug %>" aria-hidden="true" tabindex="-1">
-            <img src="<%= p.image %>" alt="<%= p.title %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <img src="<%= p.image %>" srcset="<%= srcset(p.image) %>" sizes="<%= sizes.card3 %>" alt="<%= p.title %>" width="1536" height="1024" loading="lazy" decoding="async">
             <span class="post-card__cat"><%= p.category %></span>
           </a>
           <div class="post-card__body">

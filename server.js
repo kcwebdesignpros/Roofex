@@ -19,8 +19,10 @@ const services = require('./data/services');
 const posts = require('./data/posts');
 const projects = require('./data/projects');
 const team = require('./data/team');
+const testimonials = require('./data/testimonials');
 const S = require('./lib/schema');
 const { icon } = require('./lib/icons');
+const { srcset, midVariant, SIZES } = require('./lib/images');
 
 /**
  * Resolve the project root that holds views/, data/, lib/, public/ and img/.
@@ -96,8 +98,11 @@ const staticOpts = (maxAge) => ({
     res.setHeader('Cache-Control', `public, max-age=${Math.floor(maxAge / 1000)}, immutable`);
   },
 });
-app.use(express.static(path.join(ROOT, 'public'), staticOpts(7 * 24 * 3600 * 1000)));
+// `/img` is mounted BEFORE the generic `public` mount on purpose. The Netlify
+// build copies img/ into public/img/, and without this ordering a stale copy
+// there would shadow the canonical img/ folder during local development.
 app.use('/img', express.static(path.join(ROOT, 'img'), staticOpts(30 * 24 * 3600 * 1000)));
+app.use(express.static(path.join(ROOT, 'public'), staticOpts(7 * 24 * 3600 * 1000)));
 
 /* Body parsing (contact form) -------------------------------------- */
 app.use(express.urlencoded({ extended: false, limit: '64kb' }));
@@ -111,11 +116,15 @@ app.use((req, res, next) => {
   res.locals.services = services;
   res.locals.posts = posts;
   res.locals.recentPosts = posts.slice(0, 3);
+  res.locals.testimonials = testimonials;
   res.locals.baseUrl = BASE_URL;
   res.locals.currentPath = req.path;
   res.locals.year = new Date().getFullYear();
   res.locals.fmtDate = fmtDate;
   res.locals.icon = icon;
+  res.locals.srcset = srcset;
+  res.locals.midVariant = midVariant;
+  res.locals.sizes = SIZES;
   res.locals.isActive = (url) =>
     url === '/' ? req.path === '/' : req.path === url || req.path.startsWith(url + '/');
   res.locals.meta = null;
@@ -148,7 +157,9 @@ app.get('/', (req, res) => {
         'Roofex is a licensed, insured roofing contractor serving Kansas City and the surrounding metro. Residential and commercial roof installation, repair, inspection and 24/7 storm restoration. Free estimates.',
       keywords:
         'roofing contractor Kansas City, roof replacement Kansas City, roof repair, commercial roofing, hail damage roof repair, Roofex',
-      preloadImage: '/img/hero-bg.webp',
+      preloadImage: midVariant('/img/hero-bg.webp'),
+      preloadSrcset: srcset('/img/hero-bg.webp'),
+      preloadSizes: SIZES.full,
     },
     team,
     schema: [
@@ -217,7 +228,9 @@ app.get('/services/:slug', (req, res, next) => {
       title: service.metaTitle,
       description: service.metaDescription,
       keywords: `${service.title}, ${service.title} ${site.address.city}, roofing contractor`,
-      preloadImage: service.image,
+      preloadImage: midVariant(service.image),
+      preloadSrcset: srcset(service.image),
+      preloadSizes: SIZES.half,
     },
     canonical: `${BASE_URL}/services/${service.slug}`,
     schema: [
@@ -301,7 +314,9 @@ app.get('/blog/:slug', (req, res, next) => {
       keywords: `${post.category}, roofing advice, ${site.name}`,
       type: 'article',
       image: post.image,
-      preloadImage: post.image,
+      preloadImage: midVariant(post.image),
+      preloadSrcset: srcset(post.image),
+      preloadSizes: SIZES.half,
     },
     canonical: `${BASE_URL}/blog/${post.slug}`,
     schema: [

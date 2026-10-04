@@ -24,7 +24,7 @@
         <% services.forEach(function (s) { %>
         <article class="svc-card reveal">
           <a class="svc-card__media" href="/services/<%= s.slug %>" aria-hidden="true" tabindex="-1">
-            <img src="<%= s.cardImage %>" alt="<%= s.title %> services in <%= site.address.city %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <img src="<%= s.cardImage %>" srcset="<%= srcset(s.cardImage) %>" sizes="<%= sizes.card3 %>" alt="<%= s.title %> services in <%= site.address.city %> by <%= site.name %>" width="1536" height="1024" loading="lazy" decoding="async">
           </a>
           <div class="svc-card__body">
             <span class="svc-card__ico"><%- icon(s.icon, 22) %></span>

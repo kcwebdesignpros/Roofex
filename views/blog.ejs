@@ -30,7 +30,7 @@
         <% list.forEach(function (p) { %>
         <article class="post-card reveal">
           <a class="post-card__media" href="/blog/<%= p.slug %>" aria-hidden="true" tabindex="-1">
-            <img src="<%= p.image %>" alt="<%= p.title %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <img src="<%= p.image %>" srcset="<%= srcset(p.image) %>" sizes="<%= sizes.card3 %>" alt="<%= p.title %>" width="1536" height="1024" loading="lazy" decoding="async">
             <span class="post-card__cat"><%= p.category %></span>
           </a>
           <div class="post-card__body">

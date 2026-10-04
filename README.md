@@ -76,11 +76,27 @@ Copy `.env.example` to `.env` (or export the variables in your shell) to set `PO
 - **gzip/Brotli compression** on all responses
 - **Long-lived cache headers** for `/img`, `/css`, `/js`; short revalidating cache for HTML
 - All images are **WebP**, lazy-loaded (`loading="lazy"` + `decoding="async"`) with explicit `width`/`height` to prevent layout shift
-- Hero image loaded eagerly with `fetchpriority="high"`
+- **Responsive images:** every content image ships 2–3 resized variants and is served through `srcset` + `sizes`, so a phone downloads a ~20 KB file where a desktop takes a ~50 KB one instead of a 215 KB original
+- Hero image loaded eagerly with `fetchpriority="high"` and preloaded with `imagesrcset`
 - **One CSS file, one small deferred JS file** — no frameworks, no jQuery
 - Fonts loaded with `preconnect` + `display=swap` and a non-blocking load pattern
 - Inline SVG icons — zero icon-font or extra image requests
+- `content-visibility: auto` on the footer so its layout/paint work is deferred
 - Security headers (nosniff, frame options, referrer policy, permissions policy, HSTS)
+
+### Regenerating responsive images
+
+Variants live in `img/` alongside the originals and are committed, so deploys need no image tooling. Regenerate them after adding or replacing a source image:
+
+```bash
+npm i -D sharp
+node scripts/generate-image-variants.js
+```
+
+This writes `img/<name>-<width>.webp` files plus `img/manifest.json`, which `lib/images.js`
+reads to build the `srcset` values. The generator automatically discards any variant that is
+**not smaller than the original**, and prunes sizes that are not strictly increasing — otherwise
+`srcset` would offer the browser a heavier file at a smaller width.
 
 ---
 

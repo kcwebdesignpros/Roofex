@@ -23,7 +23,7 @@
         <% projects.forEach(function (p) { %>
         <article class="project-card reveal">
           <div class="project-card__media">
-            <img src="<%= p.image %>" alt="<%= p.title %> — <%= p.location %>" width="1536" height="1024" loading="lazy" decoding="async">
+            <img src="<%= p.image %>" srcset="<%= srcset(p.image) %>" sizes="<%= sizes.card3 %>" alt="<%= p.title %> — <%= p.location %>" width="1536" height="1024" loading="lazy" decoding="async">
             <span class="project-card__tag"><%= p.category %></span>
           </div>
           <div class="project-card__body">

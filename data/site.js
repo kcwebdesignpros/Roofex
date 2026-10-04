@@ -56,6 +56,13 @@ module.exports = {
     x: 'https://x.com/roofex',
   },
 
+  // Site credit shown in the footer bottom bar.
+  credit: {
+    prefix: 'Web and Marketing By',
+    name: 'KC Web Design Pros',
+    url: 'https://kansascitywebdesignpros.com/',
+  },
+
   // Headline stats used on the home + about pages.
   // `count` + `suffix` drive the animated counter; `value` is the no-JS fallback.
   stats: [

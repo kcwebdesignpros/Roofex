@@ -11,7 +11,7 @@
   <section class="section">
     <div class="container split">
       <div class="split__media reveal">
-        <img src="/img/about-roofex.webp" alt="A Roofex craftsman installing shingles with a nail gun" width="1254" height="1254" loading="lazy" decoding="async">
+        <img src="/img/about-roofex.webp" srcset="<%= srcset('/img/about-roofex.webp') %>" sizes="<%= sizes.half %>" alt="A Roofex craftsman installing shingles with a nail gun" width="1254" height="1254" loading="lazy" decoding="async">
         <div class="split__badge"><strong><%= site.founded %></strong><span>Founded</span></div>
       </div>
       <div class="split__body reveal">
@@ -90,7 +90,7 @@
       <div class="grid grid--3">
         <% team.forEach(function (m) { %>
         <article class="team-card reveal">
-          <img src="<%= m.image %>" alt="<%= m.name %>, <%= m.role %> at <%= site.name %>" width="1024" height="1536" loading="lazy" decoding="async">
+          <img src="<%= m.image %>" srcset="<%= srcset(m.image) %>" sizes="<%= sizes.card3 %>" alt="<%= m.name %>, <%= m.role %> at <%= site.name %>" width="1024" height="1536" loading="lazy" decoding="async">
           <div class="team-card__body">
             <h3><%= m.name %></h3>
             <p class="team-card__role"><%= m.role %></p>
@@ -106,7 +106,7 @@
   <section class="section section--tint">
     <div class="container split split--reverse">
       <div class="split__media reveal">
-        <img src="/img/service-commercial-roofing.webp" alt="Roofex commercial roofing crew working on a flat roof" width="1536" height="1024" loading="lazy" decoding="async">
+        <img src="/img/service-commercial-roofing.webp" srcset="<%= srcset('/img/service-commercial-roofing.webp') %>" sizes="<%= sizes.half %>" alt="Roofex commercial roofing crew working on a flat roof" width="1536" height="1024" loading="lazy" decoding="async">
       </div>
       <div class="split__body reveal">
         <p class="eyebrow">Credentials &amp; safety</p>
